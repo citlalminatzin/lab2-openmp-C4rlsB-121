@@ -5,6 +5,7 @@
 
 # Indicaciones de Instalación
 Es necesario tener omp.h instalado.
+
 Clonar el repositorio, otorgar permisos de ejecución a los archivos con terminación .sh y ejecutarlos.
 
 # Entregables
