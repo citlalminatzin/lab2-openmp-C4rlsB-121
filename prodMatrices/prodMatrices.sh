@@ -1,7 +1,7 @@
 #!/bin/bash
 EXECUTABLE_NAME="prodMatrices"
 FILE_NAME="prodMatrices.c"
-NUM_THREADS=(2 4 6 8)
+NUM_THREADS=(1 2 4 6 8)
 
 EXECUTABLE_PATH="./$EXECUTABLE_NAME"
 FILE_PATH="./$FILE_NAME"
