@@ -15,26 +15,32 @@ int main(){
         float inicio;
         float final;
         int chunkSize = 1;
-        int n = 2;
-        int m = 3;
-        int l = 2;
+        int n = 121;
+        int m = 3000;
+        int l = 70;
         float** matrizA = crearMatriz(n, m);
         float** matrizB = crearMatriz(m, l);
         float** matrizR = crearMatriz(n, n);
 
         // Inicializacion matrices
-        matrizA[0][0]=1.0, matrizA[0][1]=123.0, matrizA[0][2]=-12.0;
-        matrizA[1][0]=3.0, matrizA[1][1]=7.0,   matrizA[1][2]=0.001;
-
-        matrizB[0][0]=0.0,  matrizB[0][1]=1.0;
-        matrizB[1][0]=-1.0, matrizB[1][1]=10.0;
-        matrizB[2][0]=13.0, matrizB[2][1]=0.0;
+	#pragma omp parallel for collapse(2)
+        for (int i = 0; i < n; i++){
+		for (int j = 0; j < m; j++){
+			matrizA[i][j] = i + j;
+		}
+	}
+	#pragma omp parallel for collapse(2)
+        for (int i = 0; i < m; i++){
+		for (int j = 0; j < l; j++){
+			matrizB[i][j] = -i-j;
+		}
+	}
 
         // Mostrar
         printf("-------------------------------------\nA= \n");
-        printMatriz(2, 3, matrizA);
+        //printMatriz(n, m, matrizA);
         printf("-------------------------------------\nB= \n");
-        printMatriz(3,2, matrizB);
+        //printMatriz(m, l, matrizB);
         printf("-------------------------------------\nAB= \n");
 
         // Static
@@ -42,24 +48,24 @@ int main(){
         inicio = omp_get_wtime();
         prodMatriz_Static(n, m, l, matrizA, matrizB, matrizR, chunkSize);
         final = omp_get_wtime();
-        printMatriz(2, 2, matrizR);
-        printf("Tiempo: %f\n", final - inicio);
+        //printMatriz(n, l, matrizR);
+        printf("Tiempo: %.9f\n", final - inicio);
 
         // Dynamic
         printf("Dynamic ---------------\n");
         inicio = omp_get_wtime();
         prodMatriz_Dynamic(n, m, l, matrizA, matrizB, matrizR, chunkSize);
         final = omp_get_wtime();
-        printMatriz(2, 2, matrizR);
-        printf("Tiempo: %f\n", final - inicio);
+        //printMatriz(n, l, matrizR);
+        printf("Tiempo: %.9f\n", final - inicio);
 
         // Guided
         printf("Guided ---------------\n");
         inicio = omp_get_wtime();
         prodMatriz_Guided(n, m, l, matrizA, matrizB, matrizR, chunkSize);
         final = omp_get_wtime();
-        printMatriz(2, 2, matrizR);
-        printf("Tiempo: %f\n", final - inicio);
+        //printMatriz(n, l, matrizR);
+        printf("Tiempo: %.9f\n", final - inicio);
 
 
         // Collapse
@@ -67,8 +73,8 @@ int main(){
         inicio = omp_get_wtime();
         prodMatriz_Collapse(n, m, l, matrizA, matrizB, matrizR);
         final = omp_get_wtime();
-        printMatriz(2, 2, matrizR);
-        printf("Tiempo: %f\n", final - inicio);
+        //printMatriz(n, l, matrizR);
+        printf("Tiempo: %.9f\n", final - inicio);
 
 
 
