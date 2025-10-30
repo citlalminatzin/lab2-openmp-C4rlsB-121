@@ -8,6 +8,7 @@ void prodMatriz_Static(int n, int m, int l, float** matrizA, float** matrizB, fl
 void prodMatriz_Dynamic(int n, int m, int l, float** matrizA, float** matrizB, float** matrizR, int chunkSize);
 void prodMatriz_Guided(int n, int m, int l, float** matrizA, float** matrizB, float** matrizR, int chunkSize);
 void prodMatriz_Collapse(int n, int m, int l, float** matrizA, float** matrizB, float** matruzR);
+void prodMatriz_Secuencial(int n, int m, int l, float** matrizA, float** matrizB, float** matruzR);
 void printMatriz(int filasNum, int colNum, float** matriz);
 
 int main(){
@@ -37,11 +38,11 @@ int main(){
 	}
 
         // Mostrar
-        printf("-------------------------------------\nA= \n");
+        //printf("-------------------------------------\nA= \n");
         //printMatriz(n, m, matrizA);
-        printf("-------------------------------------\nB= \n");
+        //printf("-------------------------------------\nB= \n");
         //printMatriz(m, l, matrizB);
-        printf("-------------------------------------\nAB= \n");
+        //printf("-------------------------------------\nAB= \n");
 
         // Static
         printf("Static ---------------\n");
@@ -75,6 +76,17 @@ int main(){
         final = omp_get_wtime();
         //printMatriz(n, l, matrizR);
         printf("Tiempo: %.9f\n", final - inicio);
+
+
+	// Secuencial
+        printf("----------------------------------------------\n");
+        printf("----------------Secuencial ---------------\n");
+        inicio = omp_get_wtime();
+        prodMatriz_Secuencial(n, m, l, matrizA, matrizB, matrizR);
+        final = omp_get_wtime();
+        //printMatriz(n, l, matrizR);
+        printf("Tiempo: %.9f\n", final - inicio);
+
 
 
 
@@ -165,6 +177,23 @@ void prodMatriz_Collapse(int n, int m, int l, float** matrizA, float** matrizB, 
         }
 
         #pragma omp parallel for collapse(2)
+        for (int i = 0; i < n; i++){
+                for (int j = 0; j < l; j++){
+                        for (int k = 0; k < m; k++){
+                                matrizR[i][j] += matrizA[i][k] * matrizB[k][j];
+                        }
+                }
+        }
+
+}
+
+void prodMatriz_Secuencial(int n, int m, int l, float** matrizA, float** matrizB, float** matrizR){
+        for (int i = 0; i < n; i++){
+                for (int j = 0; j < l; j++){
+                        matrizR[i][j] = 0;
+                }
+        }
+
         for (int i = 0; i < n; i++){
                 for (int j = 0; j < l; j++){
                         for (int k = 0; k < m; k++){
