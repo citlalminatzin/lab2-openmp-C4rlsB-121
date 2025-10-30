@@ -17,6 +17,6 @@ int main(void){
         }
         FIN = omp_get_wtime();
         tiempof = FIN - INICIO;
-        printf("Tiempo de ejecucion con %d hilos: %f\n", numThreads, tiempof);
+        printf("Tiempo de ejecucion con %d hilos: %.12f.\n", numThreads, tiempof);
         return 0;
 }
