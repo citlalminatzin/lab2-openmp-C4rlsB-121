@@ -1,4 +1,4 @@
-#inlude <omp.h>
+#include <omp.h>
 #include <stdio.h>
 
 int main(void){
